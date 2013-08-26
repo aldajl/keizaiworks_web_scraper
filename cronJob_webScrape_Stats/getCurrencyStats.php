@@ -1,6 +1,23 @@
 <?php
-function storecStats($con, $ccrncy) {
-	$query = "CREATE TABLE ".$ccrncy."cstats(PID INT NOT NULL AUTO_INCREMENT,PRIMARY KEY(PID),timestampID INT,timestamp VARCHAR(28),cstats INT)";
+function checkTimestampID($con, $timestampID){
+	$query = "SELECT timestampID FROM CStatsInfo ORDER BY PID DESC";
+	$result = mysqli_query($con, $query);
+	$recentEntry = mysqli_fetch_array($result);
+	if($timestampID == $recentEntry['timestampID']){
+		return true;
+	}
+	else return false;
+}
+
+function updateTimestampID($con, $timestampID){
+	$tDate = date(DATE_ATOM);
+	$query = "INSERT INTO CStatsINFO (timestampID, timestamp) VALUES ('$timestampID', '$tDate')";
+	mysqli_query($con, $query) or die('Error, insert query failed');
+}
+
+function storeCStats($con, $timestampID, $ccrncy, $cStats) {
+	$tDate = date(DATE_ATOM);
+	$query = "INSERT INTO ".$ccrncy."cstats (timestampID, timestamp, cstats) VALUES ('$timestampID','$tDate','$cStats')";
 	mysqli_query($con, $query) or die('Error, create query failed');
 }
 
@@ -201,12 +218,22 @@ else{
 	$begPos = strpos($html, "timestamp");
 	$midPos = strpos($html, ' ', $begPos);
 	$endPos = strpos($html, ',', $begPos);
-	foreach ($stats_data as $data){
-		$begPos = strpos($html, $data);
-		$midPos = strpos($html, ' ', $begPos);
-		$endPos = strpos($html, ',', $begPos);
-		$crncy = (int) substr($html, $midPos, ($endPos - $midPos));
-		storecStats($con, $data);
+	$timestampID = (int) substr($html, $midPos, ($endPos - $midPos));
+	
+	if(!checkTimestampID($con, $timestampID)){
+		updateCStats($con, $timestampID);
+		
+		foreach ($stats_data as $data){
+			$begPos = strpos($html, $data);
+			$midPos = strpos($html, ' ', $begPos);
+			if(strpos($html, ',', $begPos) == False){
+				$endPos = strpos($html, '}', $begPos);
+			}
+			else $endPos = strpos($html, ',', $begPos);
+			
+			$cStats = (int) substr($html, $midPos, ($endPos - $midPos));
+			storeCStats($con, $timestamp, $data, $cStats);
+		}	
 	}
 	mysqli_close($con);
 }
