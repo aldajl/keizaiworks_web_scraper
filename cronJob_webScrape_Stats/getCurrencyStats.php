@@ -1,7 +1,7 @@
 <?php
-function storeLink($con, $timestamp, $ccrncy, $crncy) {
-	$query = "INSERT INTO currencyStats (timestamp, ccrncy, crncy) VALUES ('$timestamp', '$ccrncy', '$crncy')";
-	mysql_query($query) or die('Error, insert query failed');
+function storecStats($con, $ccrncy) {
+	$query = "CREATE TABLE ".$ccrncy."cstats(PID INT NOT NULL AUTO_INCREMENT,PRIMARY KEY(PID),timestampID INT,timestamp VARCHAR(28),cstats INT)";
+	mysqli_query($con, $query) or die('Error, create query failed');
 }
 
 $target_url = "http://openexchangerates.org/api/latest.json?app_id=184dfd89fd9c493c9501a09088a26b1b";
@@ -173,7 +173,7 @@ $stats_data = array(
     "ZMW",
     "ZWL");
 
-$con=mysqli_connect("pdb7.awardspace.net:3306","1491219_1943","As84267139","1491219_1943");
+$con=mysqli_connect("pdb7.awardspace.net:3306","1491219_cstats","As84267139","1491219_cstats");
 
 if (mysqli_connect_errno($con))
 {
@@ -205,5 +205,6 @@ else{
 		$endPos = strpos($html, ',', $begPos);
 		
 	}
-	storeLink($con, 1234567890, USD, 1);
+	storecStats($con, "JPY");
+	mysqli_close($con);
 }
