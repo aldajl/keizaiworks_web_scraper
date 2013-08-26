@@ -1,0 +1,43 @@
+<?php
+function storeLink($con) {
+	$query = "INSERT INTO links (url, gathered_from) VALUES ('$url', '$gathered_from')";
+	mysql_query($query) or die('Error, insert query failed');
+}
+
+$target_url = "http://openexchangerates.org/api/latest.json?app_id=184dfd89fd9c493c9501a09088a26b1b";
+$userAgent = 'Googlebot/2.1 (http://www.googlebot.com/bot.html)';
+$stats_data = array('timestamp', $exch);
+$stats = array(0, 0);
+
+$con=mysqli_connect("pdb7.awardspace.net:3306","1491219_1943","As84267139","1491219_1943");
+
+if (mysqli_connect_errno($con))
+{
+	echo "Failed to connect to MySQL: " . mysqli_connect_error();
+}
+else{
+	// make the cURL request to $target_url
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+	curl_setopt($ch, CURLOPT_URL,$target_url);
+	curl_setopt($ch, CURLOPT_FAILONERROR, true);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+	
+	$html= curl_exec($ch);
+	if (!$html) {
+		echo "<br />cURL error number:" .curl_errno($ch);
+		echo "<br />cURL error:" . curl_error($ch);
+		exit;
+	}
+	
+	$count = 0;
+	foreach ($stats_data as $data){
+		$begPos = strpos($html, $data);
+		$midPos = strpos($html, ' ', $begPos);
+		$endPos = strpos($html, ',', $begPos);
+		
+	}
+}

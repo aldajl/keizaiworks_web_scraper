@@ -204,5 +204,4 @@ else{
 		$endPos = strpos($html, ',', $begPos);
 		
 	}
-	storeLink($con, 1234567890, USD, 1);
 }

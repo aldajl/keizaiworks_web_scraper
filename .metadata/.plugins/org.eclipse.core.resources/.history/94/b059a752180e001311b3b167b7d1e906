@@ -1,6 +1,6 @@
 <?php
-function storeLink($con, $timestamp, $ccrncy, $crncy) {
-	$query = "INSERT INTO currencyStats (timestamp, ccrncy, crncy) VALUES ('$timestamp', '$ccrncy', '$crncy')";
+function storeLink($con, $colum) {
+	$query = "INSERT INTO links (url, gathered_from) VALUES ('$url', '$gathered_from')";
 	mysql_query($query) or die('Error, insert query failed');
 }
 
@@ -204,5 +204,4 @@ else{
 		$endPos = strpos($html, ',', $begPos);
 		
 	}
-	storeLink($con, 1234567890, USD, 1);
 }
