@@ -173,7 +173,7 @@ $stats_data = array(
     "ZMW",
     "ZWL");
 
-$con=mysqli_connect("pdb7.awardspace.net:3306","1491219_cstats","As84267139","1491219_cstats");
+$con=mysqli_connect("pdb7.awardspace.net","1491219_cstats","As84267139","1491219_cstats");
 
 if (mysqli_connect_errno($con))
 {
@@ -198,13 +198,15 @@ else{
 	}
 	
 	//this is currently incomplete, will be finished at a later date
-	$count = 0;
+	$begPos = strpos($html, "timestamp");
+	$midPos = strpos($html, ' ', $begPos);
+	$endPos = strpos($html, ',', $begPos);
 	foreach ($stats_data as $data){
 		$begPos = strpos($html, $data);
 		$midPos = strpos($html, ' ', $begPos);
 		$endPos = strpos($html, ',', $begPos);
-		
+		$crncy = (int) substr($html, $midPos, ($endPos - $midPos));
+		storecStats($con, $data);
 	}
-	storecStats($con, "JPY");
 	mysqli_close($con);
 }
