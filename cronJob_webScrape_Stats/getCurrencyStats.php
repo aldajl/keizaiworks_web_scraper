@@ -11,7 +11,7 @@ function checkTimestampID($con, $timestampID){
 
 function updateCStatsInfo($con, $timestampID){
 	$tDate = date(DATE_ATOM);
-	$query = "INSERT INTO CStatsINFO (timestampID, timestamp) VALUES ('$timestampID', '$tDate')";
+	$query = "INSERT INTO CStatsInfo (timestampID, timestamp) VALUES ('$timestampID', '$tDate')";
 	mysqli_query($con, $query) or die('Error, insert query failed');
 }
 
@@ -231,8 +231,8 @@ else{
 			}
 			else $endPos = strpos($html, ',', $begPos);
 			
-			$cStats = (int) substr($html, $midPos, ($endPos - $midPos));
-			storeCStats($con, $timestamp, $data, $cStats);
+			$cStats = (float) substr($html, $midPos, ($endPos - $midPos));
+			storeCStats($con, $timestampID, $data, $cStats);
 		}	
 	}
 	mysqli_close($con);
