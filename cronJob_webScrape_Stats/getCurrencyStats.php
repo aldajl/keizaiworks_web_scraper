@@ -197,6 +197,7 @@ else{
 		exit;
 	}
 	
+	//this is currently incomplete, will be finished at a later date
 	$count = 0;
 	foreach ($stats_data as $data){
 		$begPos = strpos($html, $data);
