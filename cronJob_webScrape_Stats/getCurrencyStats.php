@@ -9,7 +9,7 @@ function checkTimestampID($con, $timestampID){
 	else return false;
 }
 
-function updateTimestampID($con, $timestampID){
+function updateCStatsInfo($con, $timestampID){
 	$tDate = date(DATE_ATOM);
 	$query = "INSERT INTO CStatsINFO (timestampID, timestamp) VALUES ('$timestampID', '$tDate')";
 	mysqli_query($con, $query) or die('Error, insert query failed');
@@ -221,7 +221,7 @@ else{
 	$timestampID = (int) substr($html, $midPos, ($endPos - $midPos));
 	
 	if(!checkTimestampID($con, $timestampID)){
-		updateCStats($con, $timestampID);
+		updateCStatsInfo($con, $timestampID);
 		
 		foreach ($stats_data as $data){
 			$begPos = strpos($html, $data);
