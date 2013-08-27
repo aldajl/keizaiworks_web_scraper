@@ -11,14 +11,16 @@ function getDBCon(){
 
 function getCStat($con, $cur){
 	$query = "SELECT cstats FROM ".$cur."cstats ORDER BY PID DESC";
-	mysqli_query($con, $query) or die('Error, create query failed');
+	$results = mysqli_query($con, $query) or die('Error, create query failed');
 	$recentEntry = mysqli_fetch_array($result);
 	return $recentEntry['cstats'];
 }
 
 function conversion($fromCStat, $toCStat){
 	$from = 1;
-	$to = (1/$toCStat)/$fromCStat;
+	$to = $toCStat/$fromCStat;
+	if(empty($fromCStat)) $fromCStat = 1;
+	if(empty($toCStat)) $toCStat = 1;
 	echo "$from --- $to";
 }
 ?>
