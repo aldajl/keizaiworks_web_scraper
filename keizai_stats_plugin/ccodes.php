@@ -1,8 +1,5 @@
 <?php
-$x=0;
-function printCCodes(){
-	$_return;
-	$eof = 'eof';
+function getCCodes($begin, $after){
 	$ccodes = array(
 			"AED",
 			"AFN",
@@ -169,12 +166,9 @@ function printCCodes(){
 			"ZMK",
 			"ZMW",
 			"ZWL");
-	
-	if(x < count($ccodes)){
-		$_return = $ccodes[x];
-		$x+=1;
-		return $_return;
+	foreach ($ccodes as $ccode){
+		echo $begin."$ccode".">".$ccode.$after;
 	}
-	else return $eof;
+
 }
 ?>

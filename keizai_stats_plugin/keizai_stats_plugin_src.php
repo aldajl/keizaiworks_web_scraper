@@ -8,13 +8,12 @@ Version: 1
 Author URI: NA
 */
 include 'ccodes.php';
-
 class keizaiStatsPlugin extends WP_Widget
 {
 	function keizaiStatsPlugin()
 	{
 		$widget_ops = array('classname' => 'keizaiStatsPlugin', 'description' => "Retreives Economic Statics including currency" );
-		$this->WP_Widget('keizaiStatsPlugin', 'Keizai Stats', $widget_ops);
+		$this->WP_Widget('keizai Stats Plugin', 'Keizai Stats', $widget_ops);
 	}
 
 	function form($instance)
@@ -42,6 +41,7 @@ class keizaiStatsPlugin extends WP_Widget
  
   	function widget($args, $instance)
   	{
+  		
   		/*
    		extract($args, EXTR_SKIP);
  
@@ -54,16 +54,27 @@ class keizaiStatsPlugin extends WP_Widget
     	echo $after_widget;
     	*/
   		
+  		echo $before_widget;
   		?>
-  		<p><label>From:</label>
-  		<select>
+  		<Form action="/wp-content/plugins/keizai_stats_plugin/keizaireport.php" method="post">
+  			From:
+  			<select id="cstatsFrom" name="cstatsFrom">
+  			<option value="" selected="selected"></option>
+  			<?php
+  			getCCodes("<option value=", "</option>");
+  			?>
+  			</select>
+  			To:
+  			<select id="cstatsTo" name="cstatsTo">
+  			<option value="" selected="selected"></option>
+  			<?php
+  			getCCodes("<option value=", "</option>");
+  			?>
+  			</select>
+  			<button type="submit">Fetch!</button>
+  		</Form>
   		<?php
-  		while($ccode=printCCodes() != "eof"){
-  			echo '<option value="'.$ccode.'">'.$ccode.'</option>';
-  		}
-  		?>
-  		</select>
-  		<?php
+  		echo $after_widget;
   	}
  
 }
