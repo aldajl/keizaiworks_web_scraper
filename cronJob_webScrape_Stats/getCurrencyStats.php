@@ -214,24 +214,17 @@ else{
 		exit;
 	}
 	
+	$jsonData = json_decode($html, true);
+	
 	//this is currently incomplete, will be finished at a later date
-	$begPos = strpos($html, "timestamp");
-	$midPos = strpos($html, ' ', $begPos);
-	$endPos = strpos($html, ',', $begPos);
-	$timestampID = (int) substr($html, $midPos, ($endPos - $midPos));
+	$timestampID = (int) $jsonData['timestamp'];
 	
 	if(!checkTimestampID($con, $timestampID)){
 		updateCStatsInfo($con, $timestampID);
 		
 		foreach ($stats_data as $data){
-			$begPos = strpos($html, $data);
-			$midPos = strpos($html, ' ', $begPos);
-			if(strpos($html, ',', $begPos) == False){
-				$endPos = strpos($html, '}', $begPos);
-			}
-			else $endPos = strpos($html, ',', $begPos);
-			
-			$cStats = (float) substr($html, $midPos, ($endPos - $midPos));
+
+			$cStats = (float) $jsonData['rates'][$data];
 			storeCStats($con, $timestampID, $data, $cStats);
 		}	
 	}
