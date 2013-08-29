@@ -1,4 +1,5 @@
 <?php
+
 function checkTimestampID($con, $timestampID){
 	$query = "SELECT timestampID FROM CStatsInfo ORDER BY PID DESC";
 	$result = mysqli_query($con, $query);
@@ -19,6 +20,18 @@ function storeCStats($con, $timestampID, $ccrncy, $cStats) {
 	$tDate = date(DATE_ATOM);
 	$query = "INSERT INTO ".$ccrncy."cstats (timestampID, timestamp, cstats) VALUES ('$timestampID','$tDate','$cStats')";
 	mysqli_query($con, $query) or die('Error, create query failed');
+}
+
+function curlWeb($target_url, $userAgent){
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+	curl_setopt($ch, CURLOPT_URL,$target_url);
+	curl_setopt($ch, CURLOPT_FAILONERROR, true);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+	return curl_exec($ch);
 }
 
 $target_url = "http://openexchangerates.org/api/latest.json?app_id=184dfd89fd9c493c9501a09088a26b1b";
@@ -191,23 +204,12 @@ $stats_data = array(
     "ZWL");
 
 $con=mysqli_connect("pdb7.awardspace.net","1491219_cstats","As84267139","1491219_cstats");
-
 if (mysqli_connect_errno($con))
 {
 	echo "Failed to connect to MySQL: " . mysqli_connect_error();
 }
 else{
-	// make the cURL request to $target_url
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
-	curl_setopt($ch, CURLOPT_URL,$target_url);
-	curl_setopt($ch, CURLOPT_FAILONERROR, true);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-	curl_setopt($ch, CURLOPT_AUTOREFERER, true);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
-	curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-	
-	$html= curl_exec($ch);
+	$html = curlWeb($target_url, $userAgent);
 	if (!$html) {
 		echo "<br />cURL error number:" .curl_errno($ch);
 		echo "<br />cURL error:" . curl_error($ch);
@@ -215,8 +217,6 @@ else{
 	}
 	
 	$jsonData = json_decode($html, true);
-	
-	//this is currently incomplete, will be finished at a later date
 	$timestampID = (int) $jsonData['timestamp'];
 	
 	if(!checkTimestampID($con, $timestampID)){
@@ -228,5 +228,6 @@ else{
 			storeCStats($con, $timestampID, $data, $cStats);
 		}	
 	}
+	
 	mysqli_close($con);
 }
