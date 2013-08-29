@@ -14,11 +14,11 @@ function curlWeb($target_url, $userAgent){
 
 function storeNasdaq($conStock, $nasDaqData){
 	$tDate = date(DATE_ATOM);
-	$query = "INSERT INTO nasdaqStats(stockName, stockStats, statDiff, statDiffPer, volume, beforeVal, afterVal, timestamp) 
-				VALUES (".$nasDaqData['name'].", ".$nasDaqData['stockStats'].", ".$nasDaqData['statDiff'].", ".$nasDaqData['statDiffPer'].", ".$nasDaqData['volume'].",
-						".$nasDaqData['beforeVal'].", ".$nasDaqData['afterVal'].", $tDate)";
+	$query = "INSERT INTO nasdaqStats (stockName, stockStats, statDiff, statDiffPer, volume, beforeVal, afterVal, timestamp) 
+				VALUES ('".$nasDaqData['name']."','".$nasDaqData['stockStats']."','".$nasDaqData['statDiff']."','".$nasDaqData['statDiffPer']."','".$nasDaqData['volume']."',
+						'".$nasDaqData['beforeVal']."','".$nasDaqData['afterVal']."', '$tDate')";
 	
-	mysqli_query($conStock, $query) or die('Error, insert query failed');
+	mysqli_query($conStock, $query) or die('Error, insert query failed for '.$nasDaqData['name']);
 }
 
 function __nasdaqReturnData($html, $begRef, $dataRef, $dataRefalt){
@@ -53,7 +53,7 @@ function getNasdaqInfo($conStock, $html, $userAgent){
 
 $target_url = "http://www.nasdaq.com/";
 $userAgent = 'Googlebot/2.1 (http://www.googlebot.com/bot.html)';
-$conStock=mysqli_connect("pdb7.awardspace.net","1491219_stocks","As84267139","1491219_cstats");
+$conStock=mysqli_connect("pdb7.awardspace.net","1491219_stocks","As84267139","1491219_stocks");
 
 if (mysqli_connect_errno($conStock))
 {

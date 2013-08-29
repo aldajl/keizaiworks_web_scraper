@@ -13,49 +13,37 @@ class keizaiStatsPlugin extends WP_Widget
 	function keizaiStatsPlugin()
 	{
 		$widget_ops = array('classname' => 'keizaiStatsPlugin', 'description' => "Retreives Economic Statics including currency" );
-		$this->WP_Widget('keizai Stats Plugin', 'Keizai Stats', $widget_ops);
+		$this->WP_Widget('keizaiStatsPlugin', 'Keizai Stats', $widget_ops);
 	}
 
 	function form($instance)
 	{
-		$instance = wp_parse_args( (array) $instance, array( 'cSel' => '' ) );
-		$title = $instance['cSel'];
+		$instance = wp_parse_args( (array) $instance, array( 'title' => '' ) );
+		$title = $instance['title'];
 		?>
-		<h2>This is only temporary for testing purposes. Will be able to change in widget details</h2>
-  		<p><select id="<?php echo $this->get_field_id('cSel');?>" name="<?php echo $this->get_field_name('cSel'); ?>" >
-  			<option><?php echo $instance['cSel'];?>
-  			<option disabled>---</option>
-  			<option value="USD">USD</option>
-  			<option value="JPY">JPY</option>
-  			<option value="ZWL">ZWL</option>
-		</select></p>
+		<p><label for="<?php echo $this->get_field_id('title'); ?>">Title: <input class="widefat" id="<?php echo $this->get_field_id('title');?>" name="<?php echo $this->get_field_name('title');?>" type="text" value="<?php echo attribute_escape($title); ?>" ></label></p>
 		<?php
  	}
  
   	function update($new_instance, $old_instance)
   	{
     	$instance = $old_instance;
-    	$instance['cSel'] = $new_instance['cSel'];
+    	$instance['title'] = $new_instance['title'];
     	return $instance;
   	}
  
   	function widget($args, $instance)
   	{
+  		extract($args, EXTR_SKIP);
   		
-  		/*
-   		extract($args, EXTR_SKIP);
- 
-    	echo $before_widget;
-    	$title = empty($instance['cSel']) ? ' ' : apply_filters('widget_text', $instance['cSel']);
+  		echo $before_widget;
+  		$title = empty($instance['title']) ? ' ' : apply_filters('widget_title', $instance['title']);
  
     	if (!empty($title))
       	echo $before_title . $title . $after_title;;
- 
-    	echo $after_widget;
-    	*/
   		
-  		echo $before_widget;
   		?>
+  		
   		<Form action="/wp-content/plugins/keizai_stats_plugin/keizaireport.php" method="post">
   			From:
   			<select id="cstatsFrom" name="cstatsFrom">
