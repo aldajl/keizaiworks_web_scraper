@@ -15,7 +15,7 @@ function curlWeb($target_url, $userAgent){
 function storeNasdaq($conStock, $nasDaqData){
 	$tDate = date(DATE_ATOM);
 	$query = "INSERT INTO nasdaqStats (stockName, from, parent, stockStats, statDiff, statDiffPer, volume, beforeVal, afterVal, timestamp) 
-				VALUES ('".$nasDaqData['name']."',nasdaq,nasdaq,'".$nasDaqData['stockStats']."','".$nasDaqData['statDiff']."','".$nasDaqData['statDiffPer']."','".$nasDaqData['volume']."',
+				VALUES ('".$nasDaqData['name']."',national,nasdaq,'".$nasDaqData['stockStats']."','".$nasDaqData['statDiff']."','".$nasDaqData['statDiffPer']."','".$nasDaqData['volume']."',
 						'".$nasDaqData['beforeVal']."','".$nasDaqData['afterVal']."', '$tDate')";
 	
 	mysqli_query($conStock, $query) or die('Error, insert query failed for '.$nasDaqData['name']);
