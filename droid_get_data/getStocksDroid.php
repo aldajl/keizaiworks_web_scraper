@@ -12,7 +12,7 @@ function getDBCon($DB){
 }
 
 function getNasDaqData($conStocks){
-	$query = "SELECT stockName, from, parent, stockStats, statDiff, statDiffPer, volume, beforeVal, afterVal, timestamp FROM nasdaqStats ORDER by PID DESC LIMIT 7";
+	$query = "SELECT stockName, stockFrom, stockParent, stockStats, statDiff, statDiffPer, volume, beforeVal, afterVal, timestamp FROM nasdaqStats ORDER by PID DESC LIMIT 9";
 	$sendData = mysqli_query($conStocks, $query) or die('Error, nasdaq query failed');
 	return $sendData;
 }

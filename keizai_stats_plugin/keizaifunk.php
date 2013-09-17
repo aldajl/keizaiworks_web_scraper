@@ -31,7 +31,7 @@ function conversion($fromCStat, $toCStat){
 }
 
 function getNasDaqData($conStocks){
-	$query = "SELECT stockName, stockStats, statDiff, statDiffPer, volume, beforeVal, afterVal, timestamp FROM nasdaqStats ORDER by PID DESC LIMIT 7";
+	$query = "SELECT stockName, stockStats, statDiff, statDiffPer, volume, beforeVal, afterVal, timestamp FROM nasdaqStats ORDER by PID DESC LIMIT 10";
 	$sendData = mysqli_query($conStocks, $query) or die('Error, nasdaq query failed');
 	return $sendData;
 }
