@@ -11,14 +11,17 @@ function getDBCon($DB){
 	}
 }
 
-function getNasDaqData($conStocks){
-	$query = "SELECT stockName, stockFrom, stockParent, stockStats, statDiff, statDiffPer, volume, beforeVal, afterVal, timestamp FROM nasdaqStats ORDER by PID DESC LIMIT 9";
-	$sendData = mysqli_query($conStocks, $query) or die('Error, nasdaq query failed');
+function getData($conStocks, $query){
+	$sendData = mysqli_query($conStocks, $query) or die('Error, query failed '.mysqli_error($conStocks));
 	return $sendData;
 }
 
+$nasDaqQ = "(SELECT stockName, stockFrom, stockParent, stockStats, statDiff, timestamp FROM nasdaqStats ORDER by PID DESC LIMIT 9)";
+$topixQ = "(SELECT stockName, stockFrom, stockParent, stockClose AS stockStats, stockChange as statDiff, timestamp FROM tokyoStats ORDER by PID DESC LIMIT 1)";
+$query = $nasDaqQ." UNION ".$topixQ;
+
 $conStocks = getDBCon("1491219_stocks");
-$stockData = getNasDaqData($conStocks);
+$stockData = getData($conStocks, $query);
 $output = array();
 while($data = mysqli_fetch_assoc($stockData)){
 	$output[] = $data;
